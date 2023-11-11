@@ -74,10 +74,18 @@
   /* Tablets pequenos */
 @media(min-width:768px) and (max-width:991px){
   .filter{
-    width: 95%;
+    width: 80%;
+  }
+  .filters-data{
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
   }
 }
 
 /* Tablets grandes e Notebook */
 @media(min-width:992px) and (max-width:1400px){
+  .filter{
+    width: 90%;
+  }
 }
