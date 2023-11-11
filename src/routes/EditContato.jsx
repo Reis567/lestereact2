@@ -15,34 +15,43 @@ import { Input } from '@/components/ui/input';
 const EditContato = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const existingContatos = JSON.parse(localStorage.getItem('contatos')) || [];
+  const contatoToEdit = existingContatos.find((c) => c.id.toString() === id.toString());
 
+  console.log('contatoToEdit', contatoToEdit);
 
-  const [contato, setContato] = useState({
-    first_name: localStorage.getItem('contatos')['first_name'],
-    last_name: localStorage.getItem('contatos')['last_name'],
-    email: localStorage.getItem('contatos')['email'],
-    gender: localStorage.getItem('contatos')['gender'],
-    language: localStorage.getItem('contatos')['language'],
-    birthday: localStorage.getItem('contatos')['birthday'],
-    avatar: localStorage.getItem('contatos')['avatar'],
-  });
+  const [contato, setContato] = useState(
+    contatoToEdit || {
+      first_name: '',
+      last_name: '',
+      email: '',
+      gender: '',
+      language: '',
+      birthday: '',
+      avatar: '',
+    }
+  );
+
   useEffect(() => {
     const existingContatos = JSON.parse(localStorage.getItem('contatos')) || [];
-    
     const contatoToEdit = existingContatos.find((c) => c.id.toString() === id.toString());
-    
+
+    console.log('useEffect contatoToEdit', contatoToEdit);
+
     if (contatoToEdit) {
       setContato(contatoToEdit);
     }
   }, [id]);
-  
+
+  console.log('contato state', contato);
 
   const updateContato = (e) => {
     e.preventDefault();
     const existingContatos = JSON.parse(localStorage.getItem('contatos')) || [];
-
-
     const contatoIndex = existingContatos.findIndex((c) => c.id.toString() === id.toString());
+
+    console.log('updateContato contatoIndex', contatoIndex);
+    console.log('updateContato contato', contato);
 
     if (contatoIndex !== -1) {
       existingContatos[contatoIndex] = contato;
@@ -51,6 +60,21 @@ const EditContato = () => {
     }
   };
 
+  const getUniqueLanguages = () => {
+    const existingContatos = JSON.parse(localStorage.getItem('contatos')) || [];
+    const languagesSet = new Set(["Ingles", "Espanhol", "Mandarim"]); // Linguagens básicas
+
+    existingContatos.forEach((contato) => {
+      if (contato.language) {
+        languagesSet.add(contato.language);
+      }
+    });
+
+    return Array.from(languagesSet);
+  };
+
+  const uniqueLanguages = getUniqueLanguages();
+  const firstThreeLanguages = uniqueLanguages.slice(0, 3);
   return (
     <div className='edit-contato'>
       <h2>Editar contato</h2>
@@ -114,19 +138,18 @@ const EditContato = () => {
                 <SelectValue placeholder="Selecione o idioma" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Ingles">Inglês</SelectItem>
-                <SelectItem value="Espanhol">Espanhol</SelectItem>
-                <SelectItem value="Mandarim">Mandarim</SelectItem>
-                <SelectItem value="Portugues">Português</SelectItem>
-                <SelectItem value="Italiano">Italiano</SelectItem>
-                <SelectItem value="Fijian">Fijian</SelectItem>
-                <SelectItem value="Latvian">Latvian</SelectItem>
-                <SelectItem value="Mongolian">Mongolian</SelectItem>
-                <SelectItem value="Zulu">Zulu</SelectItem>
-                <SelectItem value="Assamese">Assamese</SelectItem>
-                <SelectItem value="Burmese">Burmese</SelectItem>
-                <SelectItem value="Luxembourgish">Luxembourgish</SelectItem>
-              </SelectContent>
+              {firstThreeLanguages.map((language) => (
+                <SelectItem key={language} value={language}>
+                  {language}
+                </SelectItem>
+              ))}
+              {/* Adicione mais opções dinamicamente */}
+              {uniqueLanguages.slice(3).map((language) => (
+                <SelectItem key={language} value={language}>
+                  {language}
+                </SelectItem>
+              ))}
+            </SelectContent>
             </Select>
           </div>
         </div>
@@ -149,7 +172,7 @@ const EditContato = () => {
             onChange={(e) => setContato({ ...contato, avatar: e.target.value })} 
             required/>
         </div>
-        <Button type="submit" className="btn">
+        <Button type="submit">
           Salvar
         </Button>
       </form>
