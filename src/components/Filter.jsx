@@ -117,7 +117,7 @@ const Filter = ({ onFilter }) => {
           <label className='mobile-label'>Idade:</label>
           <Select onValueChange={(value) => setAgeFilter(value)} className="custom-select">
             <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Theme" />
+              <SelectValue placeholder="Todos" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Todas</SelectItem>

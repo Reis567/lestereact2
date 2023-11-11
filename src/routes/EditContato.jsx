@@ -18,15 +18,14 @@ const EditContato = () => {
 
 
   const [contato, setContato] = useState({
-    first_name: '',
-    last_name: '',
-    email: '',
-    gender: '',
-    language: '',
-    birthday: '',
-    avatar: '',
+    first_name: localStorage.getItem('contatos')['first_name'],
+    last_name: localStorage.getItem('contatos')['last_name'],
+    email: localStorage.getItem('contatos')['email'],
+    gender: localStorage.getItem('contatos')['gender'],
+    language: localStorage.getItem('contatos')['language'],
+    birthday: localStorage.getItem('contatos')['birthday'],
+    avatar: localStorage.getItem('contatos')['avatar'],
   });
-
   useEffect(() => {
     const existingContatos = JSON.parse(localStorage.getItem('contatos')) || [];
     
@@ -48,7 +47,7 @@ const EditContato = () => {
     if (contatoIndex !== -1) {
       existingContatos[contatoIndex] = contato;
       localStorage.setItem('contatos', JSON.stringify(existingContatos));
-      navigate('/'); // Redirecionar para a home
+      navigate('/');
     }
   };
 
